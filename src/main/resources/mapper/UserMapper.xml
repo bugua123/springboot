@@ -19,8 +19,65 @@
 
 
     <select id="selectAll"  resultMap="UserMap">
-        select * from user
+        select id,
+        userName,
+        passWord,
+        userType,
+        userPhone,
+        userEmail,
+        state,
+        serCreateTime,
+        userDetails
+         from user
     </select>
-
-
+    <select id="getOne" resultMap="UserMap">
+        select id,
+        userName,
+        passWord,
+        userType,
+        userPhone,
+        userEmail,
+        state,
+        serCreateTime,
+        userDetails
+         from user where id= #{id}
+    </select>
+    <insert id="insert" parameterType="com.wzw.microboot.entity.User">
+        insert into user(
+        id,
+        userName,
+        passWord,
+        userType,
+        userPhone,
+        userEmail,
+        state,
+        serCreateTime,
+        userDetails
+        )values(
+        #{id},
+        #{userName},
+        #{passWord},
+        #{userType},
+        #{userPhone},
+        #{userEmail},
+        #{state},
+        #{serCreateTime},
+        #{userDetails}
+        )
+    </insert>
+    <delete id="delete"  >
+        delete from user where id=#{id}
+    </delete>
+    <update id="update" parameterType="com.wzw.microboot.entity.User">
+        update user set
+        userName= #{userName},
+        passWord=#{passWord},
+        userType=#{userType},
+        userPhone= #{userPhone},
+        userEmail=  #{userEmail},
+        state=  #{state},
+        serCreateTime=#{serCreateTime},
+        userDetails=#{userDetails}
+        where id=#{id}
+    </update>
 </mapper>
