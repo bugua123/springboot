@@ -1,5 +1,6 @@
 package com.wzw.microboot.controller;
 
+import com.wzw.microboot.common.JsonResult;
 import com.wzw.microboot.common.MD5Utils;
 import com.wzw.microboot.common.UUIDUtils;
 import com.wzw.microboot.entity.User;
@@ -32,9 +33,21 @@ public class UserController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
-    public User getOne(@PathVariable String id) {
-        return userService.getOne(id);
+    @RequestMapping(value = "/{id}", method = RequestMethod.GET)
+    public JsonResult<User> getOne(@PathVariable String id) {
+        User user= userService.getOne(id);
+
+        JsonResult<User> u=new JsonResult<>();
+        if(user!=null) {
+            u.setData(user);
+            u.setMsg("获取成功");
+            u.setCode("200");
+        }
+        else
+        {  u.setData(user);
+            u.setMsg("用户为空");
+            u.setCode("2001");}
+        return u;
     }
 
     /**
@@ -62,9 +75,14 @@ public class UserController {
      */
     @RequestMapping(value = "/add", method = RequestMethod.POST,produces = "application/json;charset=UTF-8")
 //    @PostMapping(value="/add",produces = "application/json;charset=UTF-8")
-    public void insert(@RequestBody User user) throws Exception {
+    public JsonResult<User> insert(@RequestBody User user) throws Exception {
         user.setId(UUIDUtils.getUUID());
         System.out.print(user);
         userService.insert(user);
+        JsonResult<User> u=new JsonResult<>();
+        u.setData(user);
+        u.setMsg("添加成功");
+        u.setCode("200");
+        return u;
     }
 }
