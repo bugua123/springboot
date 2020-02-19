@@ -80,4 +80,16 @@
         userDetails=#{userDetails}
         where id=#{id}
     </update>
+    <select id="checkUser" resultMap="UserMap">
+        select id,
+        userName,
+        passWord,
+        userType,
+        userPhone,
+        userEmail,
+        state,
+        serCreateTime,
+        userDetails
+         from user where userName= #{userName} and passWord=#{passWord}
+    </select>
 </mapper>

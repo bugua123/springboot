@@ -11,4 +11,6 @@ public interface UserService {
     void delete(String id);
     void insert(User user);
     void update(User user);
+    User checkUser(String userName,String passWord);
+
 }

@@ -37,4 +37,9 @@ public class UserServiceImpl implements UserService {
     public void update(User user) {
      userMapper.update(user);
     }
+
+    @Override
+    public User checkUser(String userName, String passWord) {
+       return userMapper.checkUser(userName, passWord);
+    }
 }

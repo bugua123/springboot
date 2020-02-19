@@ -1,6 +1,9 @@
 package com.wzw.microboot.common;
 
 public class JsonResult<T> {
+    private static final String CODE_SUCCESS = "success";
+
+    private static final String CODE_FAIL = "fail";
     private T data;
     private String code;
     private String msg;
@@ -46,7 +49,15 @@ public class JsonResult<T> {
         this.code = code;
         this.msg = msg;
     }
-
+    /**
+     * 若没有数据返回，可以人为指定状态码和提示信息
+     * @param code
+     * @param data
+     */
+    public JsonResult(String code, T data) {
+        this.code = code;
+        this.data = data;
+    }
     /**
      * 有数据返回时，状态码为 0，默认提示信息为“操作成功！”
      * @param data
@@ -66,6 +77,17 @@ public class JsonResult<T> {
         this.data = data;
         this.code = "0";
         this.msg = msg;
+    }
+    public static JsonResult success(String data){
+        return new JsonResult(CODE_SUCCESS, data);
+    }
+
+    public static JsonResult fail(String msg){
+        return new JsonResult(CODE_FAIL, msg);
+    }
+
+    public static JsonResult widthCode(String errorCode) {
+        return new JsonResult(errorCode);
     }
 
 }
