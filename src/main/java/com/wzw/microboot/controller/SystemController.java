@@ -12,7 +12,7 @@ public class SystemController {
      *
      */
     @RequestMapping(value = "/toLogin")
-    public String login(){
+    public String toLogin(){
         System.out.print("进入跳转");
         return "/system/index/login";
     }
