@@ -14,7 +14,7 @@ public class User  implements Serializable {
     private Integer state;
     private Date serCreateTime;
     private String userDetails;
-
+    private String salt;
     public String getId() {
         return id;
     }
@@ -87,6 +87,14 @@ public class User  implements Serializable {
         this.userDetails = userDetails;
     }
 
+    public String getSalt() {
+        return salt;
+    }
+
+    public void setSalt(String salt) {
+        this.salt = salt;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -99,6 +107,7 @@ public class User  implements Serializable {
                 ", state=" + state +
                 ", serCreateTime=" + serCreateTime +
                 ", userDetails='" + userDetails + '\'' +
+                ", salt='" + salt + '\'' +
                 '}';
     }
 }

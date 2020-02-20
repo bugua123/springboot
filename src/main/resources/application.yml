@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8089
   servlet:
     context-path: /
 spring:
@@ -7,8 +7,30 @@ spring:
     url:  jdbc:mysql://localhost:3306/demo2?useUnicode=true&characterEncoding=utf-8&useSSL=true&serverTimezone=UTC
     username: root
     password: root
-    driver-class-name: com.mysql.jdbc.Driver
+    driver-class-name: com.mysql.cj.jdbc.Driver
 mybatis:
   type-aliases-package: com.wzw.microboot.entity
   mapper-locations: classpath*:mapper/*.xml
   check-config-location: true
+
+mybatis-plus:
+  mapper-locations:
+    - classpath:mapper/*.xml
+  global-config:
+    db-config:
+      id-type: auto
+    banner: true
+
+shiro:
+  hash-algorithm-name: md5
+  hash-iterations: 2
+  anon-urls:
+    - /index.html*
+    - /login.html*
+    - /sys/login*
+    - /login/login*
+    - /resources/**
+  login-url: /index.html
+  log-out-url: /login/logout*
+  authc-ulrs:
+  - /**
