@@ -4,14 +4,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping(value = "/sys")
+@RequestMapping(value = "sys")
 public class SystemController {
 
     /**
      * 跳转到登录页面
      *
      */
-    @RequestMapping(value = "/toLogin")
+    @RequestMapping(value = "login")
     public String toLogin(){
         System.out.print("进入跳转");
         return "/system/index/login";
