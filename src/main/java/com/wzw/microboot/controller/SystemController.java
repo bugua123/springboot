@@ -14,6 +14,6 @@ public class SystemController {
     @RequestMapping(value = "/toLogin")
     public String login(){
         System.out.print("进入跳转");
-        return "login.html";
+        return "/system/index/login";
     }
 }
