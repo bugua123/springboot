@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MyRealm extends AuthorizingRealm {
+
+
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
         //这个里面取的就是登陆认证时SimpleAuthenticationInfo info = new SimpleAuthenticationInfo(username, password, getName());的第一个参数
