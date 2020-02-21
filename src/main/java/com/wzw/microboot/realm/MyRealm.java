@@ -10,6 +10,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MyRealm extends AuthorizingRealm {
 
+    @Override
+    public String getName() {
+        return  this.getClass().getName();
+    }
 
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principalCollection) {
