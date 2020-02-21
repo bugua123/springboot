@@ -1,15 +1,19 @@
 package com.wzw.microboot.realm;
 
+import com.wzw.microboot.service.UserService;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class MyRealm extends AuthorizingRealm {
 
+    @Autowired
+    UserService userService;
     @Override
     public String getName() {
         return  this.getClass().getName();
