@@ -1,3 +1,7 @@
+
+//获取当前登录人信息
+var currentUserName='[[${session.user.name}]]'
+
 //获取系统时间
 var newDate = '';
 getLangDate();
@@ -19,7 +23,8 @@ function getLangDate(){
     var second = dateObj.getSeconds(); //当前系统时间的秒钟值
     var timeValue = "" +((hour >= 12) ? (hour >= 18) ? "晚上" : "下午" : "上午" ); //当前时间属于上午、晚上还是下午
     newDate = dateFilter(year)+"年"+dateFilter(month)+"月"+dateFilter(date)+"日 "+" "+dateFilter(hour)+":"+dateFilter(minute)+":"+dateFilter(second);
-    document.getElementById("nowTime").innerHTML = "亲爱的系统管理员，"+timeValue+"好！ 欢迎使用该系统。当前时间为： "+newDate+"　"+week;
+    document.getElementById("nowTime").innerHTML = "亲爱的【"+var_name+"】，"+timeValue+"好！ 欢迎使用 仓库管理系统。当前时间为： "+newDate+"　"+week;
+
     setTimeout("getLangDate()",1000);
 }
 

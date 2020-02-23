@@ -6,11 +6,13 @@ import com.wzw.microboot.mapper.UserMapper;
 import com.wzw.microboot.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.List;
 
 @Service
+@Transactional
 public class UserServiceImpl   extends ServiceImpl<UserMapper, User> implements UserService {
 
     @Autowired

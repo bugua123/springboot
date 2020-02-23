@@ -31,7 +31,6 @@ shiro:
     - /login.html*
     - /sys/login*
     - /login/login*
-    - /index/login*
     - /resources/**
   login-url: /index.html
   log-out-url: /login/logout*
