@@ -13,7 +13,13 @@ public class SystemController {
      */
     @RequestMapping(value = "login")
     public String toLogin(){
-        System.out.print("进入跳转");
         return "/system/index/login";
+    }
+    /**
+     * 跳转到首页
+     */
+    @RequestMapping(value = "index")
+    public String index(){
+        return "system/index/index";
     }
 }

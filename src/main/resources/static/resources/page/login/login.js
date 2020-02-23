@@ -11,10 +11,23 @@ layui.use(['form','layer','jquery'],function(){
 
     //登录按钮
     form.on("submit(login)",function(data){
-        $(this).text("登录中...").attr("disabled","disabled").addClass("layui-disabled");
-        setTimeout(function(){
-            window.location.href = "/layuicms2.0";
-        },1000);
+        var btn=$(this);
+        //设置登陆按钮为不可点击
+        btn.text("登录中...").attr("disabled","disabled").addClass("layui-disabled");
+        $.post("/login/login",data.field,function(rs){
+            //设置登陆按钮可点击，防止重复点击
+            btn.text("登录").attr("disabled",false).removeClass("layui-disabled");
+            layer.msg(rs.msg);
+            if(rs.code!=200){
+                layer.msg("测试登录失败");
+                layer.msg(rs.msg);
+            }else {
+                //跳转到templates/system/index/index.html页面
+                layer.msg(rs.msg);
+                layer.msg("测试登录成功");
+                location.href="/sys/index";
+            }
+        });
         return false;
     })
 

@@ -1,9 +1,9 @@
 package com.wzw.microboot.common;
 
 public class JsonResult<T> {
-    private static final String CODE_SUCCESS = "success";
+    private static final String CODE_SUCCESS = "200";
 
-    private static final String CODE_FAIL = "fail";
+    private static final String CODE_FAIL = "-1";
     private T data;
     private String code;
     private String msg;

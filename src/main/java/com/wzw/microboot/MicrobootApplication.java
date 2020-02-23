@@ -1,11 +1,11 @@
 package com.wzw.microboot;
 
+import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringBootConfiguration;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
-import tk.mybatis.spring.annotation.MapperScan;
 
 /**
  * @SpringBootApplication 替代了@SpringBootConfiguration、@EnableAutoConfiguration、@ComponentScan这三个注解的功能
@@ -17,7 +17,7 @@ import tk.mybatis.spring.annotation.MapperScan;
  */
 
 @MapperScan("com.wzw.microboot.mapper")
-@SpringBootApplication(scanBasePackages={"com.wzw.*"})
+@SpringBootApplication(scanBasePackages={"com.wzw.**"})
 public class MicrobootApplication {
 
     public static void main(String[] args) {
