@@ -1,12 +1,12 @@
 package com.wzw.microboot.vo;
 
-import com.wzw.microboot.entity.Loginfo;
+import com.wzw.microboot.entity.Notice;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.io.Serializable;
 import java.util.Date;
 
-public class LoginfoVo extends Loginfo implements Serializable {
+public class NoticeVo extends Notice implements Serializable {
     private static final long serialVersionUID=1L;
 
     private Integer page=1;

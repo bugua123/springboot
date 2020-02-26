@@ -1,12 +1,10 @@
 package com.wzw.microboot.vo;
 
-import com.wzw.microboot.entity.Loginfo;
-import org.springframework.format.annotation.DateTimeFormat;
+import com.wzw.microboot.entity.Dept;
 
 import java.io.Serializable;
-import java.util.Date;
 
-public class LoginfoVo extends Loginfo implements Serializable {
+public class DeptVo extends Dept implements Serializable {
     private static final long serialVersionUID=1L;
 
     private Integer page=1;
@@ -14,10 +12,7 @@ public class LoginfoVo extends Loginfo implements Serializable {
 
     private Integer[] ids;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date startTime;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private Date endTime;
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
@@ -47,20 +42,6 @@ public class LoginfoVo extends Loginfo implements Serializable {
         this.limit = limit;
     }
 
-    public Date getStartTime() {
-        return startTime;
-    }
 
-    public void setStartTime(Date startTime) {
-        this.startTime = startTime;
-    }
-
-    public Date getEndTime() {
-        return endTime;
-    }
-
-    public void setEndTime(Date endTime) {
-        this.endTime = endTime;
-    }
 
 }

@@ -11,7 +11,7 @@
     <meta name="format-detection" content="telephone=no">
     <link rel="icon" href="favicon.ico">
     <link rel="stylesheet" href="/resources/layui/css/layui.css" media="all" />
-    <link rel="stylesheet" href="/resources/layui/css/public.css" media="all" />
+    <link rel="stylesheet" href="/resources/css/public.css" media="all" />
     <title>日志管理</title>
 </head>
 <body class="childrenBody">
@@ -65,10 +65,10 @@
 <div>
     <table class="layui-hide" id="loginfoTable" lay-filter="loginfoTable"></table>
     <div id="loginfoToolBar" style="display: none;">
-        <button type="button" class="layui-btn layui-btn-sm layui-btn-danger" lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
+        <button type="button" lay-event="batchDelete" class="layui-btn layui-btn-sm layui-btn-danger" lay-submit="" lay-filter="doSearch"><span class="layui-icon layui-icon-delete"></span>批量删除</button>
     </div>
     <div id="loginfoRowBar" style="display: none;">
-        <button type="button" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="doDelete"><span class="layui-icon layui-icon-delete"></span>删除</button>
+        <button type="button" lay-event="deletebyid" class="layui-btn layui-btn-danger" lay-submit="" lay-filter="doDelete"><span class="layui-icon layui-icon-delete"></span>删除</button>
     </div>
 </div>
 <!--数据表格结束-->
@@ -117,6 +117,66 @@
             });
             return false;
         });
+        //监听工具条事件
+        table.on("toolbar(loginfoTable)",function (obj) {
+            switch (obj.event) {
+                case 'batchDelete':
+                    batchDelete();
+                    break;
+            };
+        });
+        //监听行工具条事件
+        table.on("tool(loginfoTable)",function (obj) {
+            var data=obj.data;
+            switch (obj.event) {
+                case 'deletebyid':
+                     deletebyid(data);
+                    break;
+            };
+        });
+
+        function deletebyid(data) {
+            layer.confirm('你确定要删除这条记录吗?', {icon: 3, title:'提示'}, function(index){
+                $.post("/loginfo/deleteLoginfo",{id:data.id},function (res) {
+                    if(res.code==200){
+                        tableIns.reload();
+                    }
+                    layer.msg(res.msg);
+                })
+                layer.close(index);
+            });
+        }
+
+        function batchDelete() {
+            var checkStatus=table.checkStatus('loginfoTable');
+            var dataLenth=checkStatus.data.length;
+            if(dataLenth>0){
+                layer.confirm('你确定要删除记录?', {icon: 3, title:'提示'}, function(index){
+                    var data=checkStatus.data;//获取选中行
+                    var ids="";
+                    $.each(data,function (index,item) {
+                        if(index==0){
+                            ids+="ids="+item.id;
+                        }
+                        else {
+                            ids+="&ids="+item.id;
+                        }
+                    })
+                    $.post("/loginfo/batchDeleteLoginfo",ids,function (res) {
+                        if(res.code==200){
+                            tableIns.reload();
+                        }
+                        layer.msg(res.msg);
+                    })
+                    layer.close(index);
+                });
+
+            }else {
+                layer.msg("请选择要删除的记录");
+            }
+
+        }
+        
     });
 
 
