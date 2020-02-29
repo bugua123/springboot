@@ -39,7 +39,7 @@ shiro:
   anon-urls:
     - /index.html*
     - /login.html*
-    - /sys/login*
+    - /sys/toLogin*
     - /login/login*
     - /resources/**
   login-url: /index.html

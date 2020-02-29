@@ -3,6 +3,8 @@ import java.util.HashMap;
 
 import com.wzw.microboot.entity.Dept;
 import com.wzw.microboot.vo.DeptVo;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -11,12 +13,17 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.PrimitiveIterator;
 
 @Aspect
 @Component
 @EnableAspectJAutoProxy
 public class CacheAspect {
 
+    /**
+     * 日志出处
+     */
+    private Log log = LogFactory.getLog(CacheAspect.class);
     //声明缓存容器
     private Map<String,Object> CACHE_CONTAINER=new HashMap<>();
     //声明切面表达式

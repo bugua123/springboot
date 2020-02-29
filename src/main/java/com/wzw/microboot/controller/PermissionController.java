@@ -53,7 +53,7 @@ public class PermissionController {
         queryWrapper.eq("type","permission");
         queryWrapper.like(StringUtils.isNotBlank(permissionVo.getTitle()),"title",permissionVo.getTitle());
         queryWrapper.like(StringUtils.isNotBlank(permissionVo.getPercode()),"percode",permissionVo.getPercode());
-        queryWrapper.eq(permissionVo.getId()!=null, "id", permissionVo.getId()).or().eq(permissionVo.getId()!=null,"pid", permissionVo.getId());
+        queryWrapper.eq(permissionVo.getId()!=null,"pid", permissionVo.getId());
         queryWrapper.orderByAsc("ordernum");
         permissionService.page(page,queryWrapper);
         return new DataGridView(page.getTotal(),page.getRecords());

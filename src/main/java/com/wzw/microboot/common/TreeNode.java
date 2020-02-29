@@ -16,6 +16,7 @@ public class TreeNode implements Serializable {
     private String href;
     private Boolean spread;
     private List<TreeNode> children=new ArrayList<TreeNode>();
+    private String checkArr="0";//0代表不选中  1代表选中
 
     public Integer getId() {
         return id;
@@ -73,6 +74,13 @@ public class TreeNode implements Serializable {
         this.children = children;
     }
 
+    public String getCheckArr() {
+        return checkArr;
+    }
+
+    public void setCheckArr(String checkArr) {
+        this.checkArr = checkArr;
+    }
 
     /**
      * dtree数据格式
@@ -98,5 +106,14 @@ public class TreeNode implements Serializable {
         this.icon = icon;
         this.href = href;
         this.spread = spread;
+    }
+
+    //dtree 复选树构造器
+    public TreeNode(Integer id, Integer pid, String title, Boolean spread, String checkArr) {
+        this.id = id;
+        this.pid = pid;
+        this.title = title;
+        this.spread = spread;
+        this.checkArr = checkArr;
     }
 }
