@@ -123,4 +123,13 @@ public class SystemController {
         return "system/permission/permissionRight";
     }
 
+    /**
+     * 跳转到角色管理
+     *
+     */
+    @RequestMapping("toRoleManager")
+    public String toRole() {
+        return "system/role/roleManager";
+    }
+
 }
