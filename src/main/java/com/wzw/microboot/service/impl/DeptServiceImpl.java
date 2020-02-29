@@ -17,8 +17,8 @@ public class DeptServiceImpl extends ServiceImpl<DeptMapper, Dept> implements De
 
 
     @Override
-    public Dept getOne(Wrapper<Dept> queryWrapper, boolean throwEx) {
-        return super.getOne(queryWrapper, throwEx);
+    public Dept getById(Serializable id) {
+        return super.getById(id);
     }
 
     @Override

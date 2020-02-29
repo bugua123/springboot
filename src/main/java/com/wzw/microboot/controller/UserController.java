@@ -2,13 +2,20 @@ package com.wzw.microboot.controller;
 
 import cn.hutool.core.util.IdUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.wzw.microboot.common.DataGridView;
 import com.wzw.microboot.common.JsonResult;
 import com.wzw.microboot.common.MD5Utils;
 import com.wzw.microboot.common.UUIDUtils;
 import com.wzw.microboot.constant.ErrorConstant;
 import com.wzw.microboot.constant.WebConst;
+import com.wzw.microboot.entity.Dept;
 import com.wzw.microboot.entity.User;
+import com.wzw.microboot.service.DeptService;
 import com.wzw.microboot.service.UserService;
+import com.wzw.microboot.vo.UserVo;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +32,8 @@ public class UserController {
 
     @Autowired
     UserService userService;
+    @Autowired
+    DeptService deptService;
 //
 //    /**
 //     * 查询所有
@@ -34,6 +43,33 @@ public class UserController {
 //    public List<User> selectAll(){
 //       return userService.selectAll();
 //    }
+
+  @RequestMapping(value = "loadAllUser")
+  public DataGridView loadAllUser(UserVo userVo){
+      IPage<User> page=new Page<>(userVo.getPage(),userVo.getLimit());
+      QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+      queryWrapper.eq(StringUtils.isNotBlank(userVo.getName()), "loginname", userVo.getName()).or().eq(StringUtils.isNotBlank(userVo.getName()), "name", userVo.getName());
+      queryWrapper.eq(StringUtils.isNotBlank(userVo.getAddress()), "address", userVo.getAddress());
+      queryWrapper.eq("type", 1);//查询系统用户
+      queryWrapper.eq(userVo.getDeptid()!=null, "deptid",userVo.getDeptid());
+      this.userService.page(page, queryWrapper);
+      List<User> list = page.getRecords();
+      for (User user : list) {
+          Integer deptid = user.getDeptid();
+          if(deptid!=null) {
+              Dept one =deptService.getById(deptid);
+              user.setDeptname(one.getTitle());
+          }
+          Integer mgr = user.getMgr();
+          if(mgr!=null) {
+              User one = this.userService.getById(mgr);
+              user.setLeadername(one.getName());
+          }
+      }
+      return new DataGridView(page.getTotal(), list);
+  }
+
+
 //
 //    /**
 //     * 根据ID获取用户信息
