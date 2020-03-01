@@ -6,10 +6,12 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.wzw.microboot.common.*;
+import com.wzw.microboot.constant.Constast;
 import com.wzw.microboot.entity.Dept;
 import com.wzw.microboot.entity.Permission;
 import com.wzw.microboot.entity.User;
 import com.wzw.microboot.service.PermissionService;
+import com.wzw.microboot.service.RoleService;
 import com.wzw.microboot.vo.DeptVo;
 import com.wzw.microboot.vo.PermissionVo;
 import org.apache.commons.lang3.StringUtils;
@@ -25,21 +27,39 @@ public class MenuController {
 
     @Autowired
     private PermissionService permissionService;
+    @Autowired
+    private RoleService roleService;
 
     @RequestMapping(value = "loadIndexLeftMenuJson")
     public DataGridView loadIndexLeftMenuJson(PermissionVo permissionVo){
         QueryWrapper<Permission> queryWrapper=new QueryWrapper<>();
-        queryWrapper.eq("type","menu");
-        queryWrapper.eq("available","1");
+        queryWrapper.eq("type", Constast.TYPE_MNEU);
+        queryWrapper.eq("available",Constast.AVAILABLE_TRUE);
         User user= (User) WebUtils.getSession().getAttribute("user");
         List<Permission> list=null;
         if(user.getType()==0) {
+            //管理员
             list = permissionService.list(queryWrapper);
         }
         else {
-            list = permissionService.list(queryWrapper);
+            //根据用户ID+角色+权限查询
+           Integer userId=user.getId();
+           //根据用户ID查询角色
+            List<Integer> currentUserRoleIds=roleService.queryUserRoleIdsByUid(userId);
+           //根据角色ID取权限和菜单ID
+            Set<Integer> pids=new HashSet<>();//Set 不能重复
+            for (Integer rid:currentUserRoleIds) {
+                List<Integer> permissionIds=roleService.queryRolePermissionIdsByRid(rid);
+                pids.addAll(permissionIds);
+            }
+            //根据角色ID查询权限
+            if(pids.size()>0){
+                queryWrapper.in("id",pids);
+                list=permissionService.list(queryWrapper);
+            }else {
+                list=new ArrayList<>();
+            }
         }
-
         List<TreeNode> treeNodes=new ArrayList<>();
         for (Permission permission : list) {
             Integer id=permission.getId();

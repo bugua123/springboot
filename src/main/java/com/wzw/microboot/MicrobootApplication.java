@@ -16,7 +16,8 @@ import org.springframework.context.annotation.ComponentScan;
  *
  */
 
-@MapperScan("com.wzw.microboot.mapper")
+//@MapperScan("com.wzw.microboot.mapper.**")
+@MapperScan(basePackages= {"com.wzw.microboot.mapper.**","com.wzw.microboot.*.mapper.**"})
 @SpringBootApplication(scanBasePackages={"com.wzw.**"})
 public class MicrobootApplication {
 

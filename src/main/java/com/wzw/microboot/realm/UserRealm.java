@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import com.wzw.microboot.common.ActiverUser;
+import com.wzw.microboot.constant.Constast;
 import com.wzw.microboot.entity.Permission;
 import com.wzw.microboot.entity.User;
 import com.wzw.microboot.service.PermissionService;
@@ -65,8 +66,8 @@ public class UserRealm extends AuthorizingRealm {
             //查询所有菜单
             QueryWrapper<Permission> qw=new QueryWrapper<>();
             //设置只能查询菜单
-            qw.eq("type","menu");
-            qw.eq("available","1");
+            qw.eq("type", Constast.TYPE_PERMISSION);
+            qw.eq("available", Constast.AVAILABLE_TRUE);
 
             //根据用户ID+角色+权限去查询
             Integer userId=user.getId();
@@ -88,7 +89,7 @@ public class UserRealm extends AuthorizingRealm {
             for (Permission permission : list) {
                 percodes.add(permission.getPercode());
             }
-            //放到
+            //放入ActiverUser
             activerUser.setPermissions(percodes);
 
             ByteSource credentialsSalt = ByteSource.Util.bytes(user.getSalt());
@@ -108,7 +109,7 @@ public class UserRealm extends AuthorizingRealm {
         ActiverUser activerUser=(ActiverUser) principals.getPrimaryPrincipal();
         User user=activerUser.getUser();
         List<String> permissions = activerUser.getPermissions();
-        if(user.getType()==1) {
+        if(user.getType()==Constast.USER_TYPE_SUPER) {
             authorizationInfo.addStringPermission("*:*");
         }else {
             if(null!=permissions&&permissions.size()>0) {

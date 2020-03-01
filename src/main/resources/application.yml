@@ -41,7 +41,7 @@ spring:
     time-zone: GMT+8
 mybatis-plus:
   mapper-locations:
-    classpath:mapper/*Mapper.xml
+   - classpath:mapper/**/*Mapper.xml
   global-config:
     db-config:
       id-type: auto
