@@ -31,7 +31,7 @@ public interface RoleMapper extends BaseMapper<Role> {
      * 根据用户ID删除用户角色中间表的数据
      * @param id
      */
-    void deleteRoleUserByUid(@Param("id")Serializable id);
+    void deleteRoleUserByUid(@Param("id") Serializable id);
 
     /**
      * 查询当前用户拥有的角色ID集合

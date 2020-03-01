@@ -54,6 +54,7 @@ shiro:
     - /index.html*
     - /login.html*
     - /sys/toLogin*
+    - /sys/Login*
     - /login/login*
     - /resources/**
   login-url: /index.html

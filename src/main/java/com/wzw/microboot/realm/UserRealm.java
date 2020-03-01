@@ -13,14 +13,13 @@ import com.wzw.microboot.entity.User;
 import com.wzw.microboot.service.PermissionService;
 import com.wzw.microboot.service.RoleService;
 import com.wzw.microboot.service.UserService;
-import org.apache.shiro.authc.AuthenticationException;
-import org.apache.shiro.authc.AuthenticationInfo;
-import org.apache.shiro.authc.AuthenticationToken;
-import org.apache.shiro.authc.SimpleAuthenticationInfo;
+import org.apache.shiro.SecurityUtils;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
+import org.apache.shiro.subject.Subject;
 import org.apache.shiro.util.ByteSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -53,6 +52,8 @@ public class UserRealm extends AuthorizingRealm {
     @Override
     protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
 
+        //UsernamePasswordToken usernamePasswordToken=(UsernamePasswordToken) token;
+        //Subject subject= SecurityUtils.getSubject();
         QueryWrapper<User> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("loginname", token.getPrincipal().toString());
         User user = userService.getOne(queryWrapper);

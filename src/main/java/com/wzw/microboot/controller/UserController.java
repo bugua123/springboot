@@ -1,21 +1,23 @@
 package com.wzw.microboot.controller;
 
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.core.util.RandomUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
-import com.wzw.microboot.common.DataGridView;
-import com.wzw.microboot.common.JsonResult;
-import com.wzw.microboot.common.MD5Utils;
-import com.wzw.microboot.common.UUIDUtils;
+import com.wzw.microboot.common.*;
+import com.wzw.microboot.constant.Constast;
 import com.wzw.microboot.constant.ErrorConstant;
 import com.wzw.microboot.constant.WebConst;
 import com.wzw.microboot.entity.Dept;
+import com.wzw.microboot.entity.Role;
 import com.wzw.microboot.entity.User;
 import com.wzw.microboot.service.DeptService;
+import com.wzw.microboot.service.RoleService;
 import com.wzw.microboot.service.UserService;
 import com.wzw.microboot.vo.UserVo;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.ibatis.annotations.Param;
 import org.apache.shiro.crypto.hash.Md5Hash;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,8 +25,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.nio.channels.DatagramChannel;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/user")
@@ -34,6 +39,8 @@ public class UserController {
     UserService userService;
     @Autowired
     DeptService deptService;
+    @Autowired
+    private RoleService roleService;
 //
 //    /**
 //     * 查询所有
@@ -69,7 +76,159 @@ public class UserController {
       return new DataGridView(page.getTotal(), list);
   }
 
+    /**
+     * 加载最大的排序码
+     * @return
+     */
+    @RequestMapping("loadUserMaxOrderNum")
+    public Map<String,Object> loadUserMaxOrderNum(){
+        Map<String, Object> map=new HashMap<String, Object>();
 
+        QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+        queryWrapper.orderByDesc("ordernum");
+        IPage<User> page=new Page<>(1, 1);
+        List<User> list = this.userService.page(page, queryWrapper).getRecords();
+        if(list.size()>0) {
+            map.put("value", list.get(0).getOrdernum()+1);
+        }else {
+            map.put("value", 1);
+        }
+        return map;
+    }
+    /**
+     * 根据部门ID查询用户
+     */
+  @RequestMapping("loadUserByDeptId")
+    public DataGridView loadUserByDeptId(Integer deptid){
+      QueryWrapper<User> queryWrapper=new QueryWrapper<>();
+      queryWrapper.eq(deptid!=null,"deptid",deptid);
+      queryWrapper.eq("available",1);//可用
+      queryWrapper.eq("type", Constast.USER_TYPE_NORMAL);
+      List<User> list = userService.list(queryWrapper);
+      return new  DataGridView(list);
+  }
+
+    /**
+     * 把用户名转成拼音
+     */
+    @RequestMapping("changeChineseToPinyin")
+    public Map<String,Object> changeChineseToPinyin(String username){
+        Map<String,Object> map=new HashMap<>();
+        if(null!=username) {
+            map.put("value", PinyinUtils.getPingYin(username));
+        }else {
+            map.put("value", "");
+        }
+        return map;
+    }
+
+    /**
+     * 添加用户
+     */
+    @RequestMapping(value = "addUser")
+    public JsonResult addUser(UserVo userVo){
+        try {
+            userVo.setType(Constast.USER_TYPE_NORMAL);//设置用户类型
+            userVo.setHiredate(new Date());
+            String salt= IdUtil.simpleUUID().toUpperCase();
+            userVo.setSalt(salt);
+            userVo.setPwd(new Md5Hash(Constast.USER_DEFAULT_PWD,salt,2).toString());
+            userService.save(userVo);
+            return JsonResult.success("添加用户成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return JsonResult.fail("添加用户失败");
+        }
+    }
+    /**
+     * 修改用户
+     */
+    @RequestMapping(value = "updateUser")
+    public JsonResult updateUser(UserVo userVo){
+        try {
+            userService.updateById(userVo);
+            return JsonResult.success("修改用户成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return JsonResult.fail("修改用户失败");
+        }
+    }
+    /**
+     * 根据用户ID查询用户
+     */
+    @RequestMapping("loadUserById")
+    public DataGridView loadUserById(Integer id){
+        return new DataGridView(userService.getById(id));
+    }
+    @RequestMapping(value = "deleteUser")
+    public JsonResult deleteUser( Integer id){
+        try {
+            this.userService.removeById(id);
+
+            return JsonResult.success("删除用户成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return JsonResult.fail("修改用户失败");
+        }
+    }
+
+    @RequestMapping(value = "resetPwd")
+    public JsonResult resetPwd(Integer id){
+        try {
+            User user=new User();
+            user.setId(id);
+            String salt=IdUtil.simpleUUID().toUpperCase();
+            user.setSalt(salt);
+            user.setPwd(new Md5Hash(Constast.USER_DEFAULT_PWD,salt,2).toString());
+            userService.updateById(user);
+            return JsonResult.success("重置密码成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return JsonResult.fail("重置密码失败");
+        }
+
+    }
+
+    /**
+     * 根据用户ID查询角色病选择已经拥有的角色
+     * @param id
+     * @return
+     */
+    @RequestMapping(value = "initRoleByUserId")
+    public DataGridView initRoleByUserId(Integer id){
+        //1,查询所有可用的角色
+        QueryWrapper<Role> queryWrapper=new QueryWrapper<>();
+        queryWrapper.eq("available", Constast.AVAILABLE_TRUE);
+        List<Map<String, Object>> listMaps = this.roleService.listMaps(queryWrapper);
+
+        //2,查询当前用户拥有的角色ID集合
+        List<Integer> currentUserRoleIds=this.roleService.queryUserRoleIdsByUid(id);
+        for (Map<String, Object> map : listMaps) {
+            Boolean LAY_CHECKED=false;
+            Integer roleId=(Integer) map.get("id");
+            for (Integer rid : currentUserRoleIds) {
+                if(rid==roleId) {
+                    LAY_CHECKED=true;
+                    break;
+                }
+            }
+            map.put("LAY_CHECKED", LAY_CHECKED);
+        }
+        return new DataGridView(Long.valueOf(listMaps.size()), listMaps);
+    }
+    /**
+     * 保存用户和角色之间关系
+     */
+    @RequestMapping(value = "saveUserRole")
+    public JsonResult saveUserRole(Integer uid,Integer[] ids){
+        try {
+          userService.saveUserRole(uid,ids);
+            return JsonResult.success("分配权限成功");
+        }catch (Exception e){
+            e.printStackTrace();
+            return JsonResult.fail("分配权限失败");
+        }
+    }
 //
 //    /**
 //     * 根据ID获取用户信息

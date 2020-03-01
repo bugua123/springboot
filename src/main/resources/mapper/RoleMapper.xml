@@ -28,7 +28,7 @@
 
     <!-- 查询当前用户拥有的角色ID集合 -->
     <select id="queryUserRoleIdsByUid" resultType="java.lang.Integer">
-		select rid from sys_role_user where uid=#{value}
+		select rid from sys_role_user where uid=#{id}
 	</select>
 
     <!-- 保存角色和用户的关系 -->
