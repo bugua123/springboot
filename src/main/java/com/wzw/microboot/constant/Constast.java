@@ -23,5 +23,8 @@ public interface   Constast {
     public static final String TYPE_MNEU = "menu";
     public static final String TYPE_PERMISSION = "permission";
 
-
+    /**
+     * 添加图片默认图片
+     */
+    String IMAGES_DEFAULTGOODSIMG_PNG ="images/defaultgoodsimg.png" ;
 }
