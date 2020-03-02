@@ -3,7 +3,11 @@ package com.wzw.microboot.cache;
 
 
 import com.wzw.microboot.bus.domain.Customer;
+import com.wzw.microboot.bus.domain.Goods;
+import com.wzw.microboot.bus.domain.Provider;
 import com.wzw.microboot.bus.mapper.CustomerMapper;
+import com.wzw.microboot.bus.mapper.GoodsMapper;
+import com.wzw.microboot.bus.mapper.ProviderMapper;
 import com.wzw.microboot.common.SpringUtil;
 import com.wzw.microboot.entity.Dept;
 import com.wzw.microboot.entity.User;
@@ -14,11 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * 缓存
- * @author LJH
- *
- */
+
 public class CachePool {
 	
 	/**
@@ -66,18 +66,18 @@ public class CachePool {
 		for (Customer customer : customerList) {
 			CACHE_CONTAINER.put("customer:"+customer.getId(), customer);
 		}
-//		//同步供应商数据
-//		ProviderMapper providerMapper = SpringUtil.getBean(ProviderMapper.class);
-//		List<Provider> providerList = providerMapper.selectList(null);
-//		for (Provider provider : providerList) {
-//			CACHE_CONTAINER.put("customer:"+provider.getId(), provider);
-//		}
-//		//同步商品数据
-//		GoodsMapper goodsMapper=SpringUtil.getBean(GoodsMapper.class);
-//		List<Goods> goodsList = goodsMapper.selectList(null);
-//		for (Goods goods : goodsList) {
-//			CACHE_CONTAINER.put("goods:"+goods.getId(), goods);
-//		}
+		//同步供应商数据
+		ProviderMapper providerMapper = SpringUtil.getBean(ProviderMapper.class);
+		List<Provider> providerList = providerMapper.selectList(null);
+		for (Provider provider : providerList) {
+			CACHE_CONTAINER.put("customer:"+provider.getId(), provider);
+		}
+		//同步商品数据
+		GoodsMapper goodsMapper=SpringUtil.getBean(GoodsMapper.class);
+		List<Goods> goodsList = goodsMapper.selectList(null);
+		for (Goods goods : goodsList) {
+			CACHE_CONTAINER.put("goods:"+goods.getId(), goods);
+		}
 	}
 	
 }

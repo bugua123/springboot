@@ -139,5 +139,9 @@ public class SystemController {
     public String toUserManager() {
         return "system/user/userManager";
     }
+    @RequestMapping("toCacheManager")
+    public String toCacheManager(){
+        return "system/cache/cacheManager";
+    }
 
 }
