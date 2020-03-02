@@ -19,13 +19,13 @@ public class InportServiceImpl extends ServiceImpl<InportMapper, Inport> impleme
     private GoodsMapper goodsMapper;
 
     @Override
-    public boolean save(Inport entity) {
+    public boolean save(Inport inport) {
         //根据商品编号查询商品
-        Goods goods=goodsMapper.selectById(entity.getGoodsid());
-        goods.setNumber(goods.getNumber()+entity.getNumber());
+        Goods goods=goodsMapper.selectById(inport.getGoodsid());
+        goods.setNumber(goods.getNumber()+inport.getNumber());
         goodsMapper.updateById(goods);
         //保存进货信息
-        return super.save(entity);
+        return super.save(inport);
     }
 
     @Override

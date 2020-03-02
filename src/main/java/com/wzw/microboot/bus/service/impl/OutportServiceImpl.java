@@ -35,16 +35,16 @@ public class OutportServiceImpl extends ServiceImpl<OutportMapper, Outport> impl
         goods.setNumber(goods.getNumber()-number);
         this.goodsMapper.updateById(goods);
         //3,添加退货单信息
-        Outport entity=new Outport();
-        entity.setGoodsid(inport.getGoodsid());
-        entity.setNumber(number);
+        Outport outport =new Outport();
+        outport.setGoodsid(inport.getGoodsid());
+        outport.setNumber(number);
         User user=(User) WebUtils.getSession().getAttribute("user");
-        entity.setOperateperson(user.getName());
-        entity.setOutportprice(inport.getInportprice());
-        entity.setOutputtime(new Date());
-        entity.setPaytype(inport.getPaytype());
-        entity.setProviderid(inport.getProviderid());
-        entity.setRemark(remark);
-        this.getBaseMapper().insert(entity);
+        outport.setOperateperson(user.getName());
+        outport.setOutportprice(inport.getInportprice());
+        outport.setOutputtime(new Date());
+        outport.setPaytype(inport.getPaytype());
+        outport.setProviderid(inport.getProviderid());
+        outport.setRemark(remark);
+        this.getBaseMapper().insert(outport);
     }
 }
