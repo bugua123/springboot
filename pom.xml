@@ -10,8 +10,8 @@
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.wzw.microboot</groupId>
-    <artifactId>0520ERP</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <artifactId>microboot</artifactId>
+    <version>1.0-SNAPSHOT</version>
     <name>ERP</name>
     <description>ERP</description>
 
