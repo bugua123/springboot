@@ -9,11 +9,11 @@
         <version>2.1.8.RELEASE</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.sxt</groupId>
+    <groupId>com.wzw.microboot</groupId>
     <artifactId>0520ERP</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>0520ERP</name>
-    <description>仓库管理系统</description>
+    <name>ERP</name>
+    <description>ERP</description>
 
     <properties>
         <java.version>1.8</java.version>
